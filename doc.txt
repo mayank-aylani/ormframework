@@ -1,0 +1,79 @@
+ORM FRAMEWORK INFO
+
+
+- if a database table contains a field having auto increment (eg, id,name,email) than its sql will be 
+
+insert into table_name (name,email) values ('Mayank Aylani','mayank@mail.com')
+
+- what my framework will do is (database and tables have been already created) my framework will scan the tables and generate classes(DTO)
+
+*once the DTO is generated and changes is made in tables user need to use tool again
+
+- let a table 
+
+create table emp             than generated DTO -->        class Emp
+(							   {
+id int primary key,					    private String nm;
+nm char(20) not null,					    public void setNm()
+ag int not null,				   	     .....setters/getters
+dob date not null					   }
+);
+
+
+constraint 1: naming conventions used in table should be appropriate, for example instead of keeping (dob) keep it as (date_of_birth) than setter generated will be (setDateOfBirth) and getter (getDateOfBirth)
+
+constraint 2: it might be possible database not allow the long field names always, consider using latest version of database, my framework dont solve this problem it will, user need to make changes in DTO by there own.
+
+
+- Now how to analyze database (tables,views, constraints, keys, width of fields) ?, one way might be firing an SQL statements to get info, or other way to analyze using DatabaseMetaData dbmd=connection.getMetaData()
+
+
+- for testing create a database and table as 
+
+assuming you're using MySQL
+mysql -u "root" -p
+enter_your_password
+mysql>create database ormdb_1(database name);
+mysql>use ormdb_1(database name);
+mysql>source sqlscript.sql (keep sqlscript.sql file in working folder)
+
+available here : (ormframework\sql\sqlscript.sql)
+
+
+- for database connection user need to write an (db.conf) file and need to write information including database name,password
+
+eg, 
+DRIVER=com.mysql.cj.jdbc.Driver
+PROTOCOL=jdbc:mysql
+SERVER=localhost
+PORT=3306
+USERNAME=root
+DATABASE=ormdb_1
+PASSWORD=0506
+
+available here : (ormframework\src\com\orm\db.conf)
+
+
+- DBConnector will analyse the db.conf file and establish connection and return it user need to call its connect() method
+
+available here : (ormframework\src\com\orm\db\DBConnector.java)
+
+tested here : (ormframework\testcases\TestDBConnector.java)
+
+
+- Next is classes, Database, Table, TableColumn, ForeignKey and ForeignKeyColumnMapping
+
+1.Database has List<Table>, as ArrayList because its ordered
+2.Table has name, List<TableColumn>, List<ForeignKey>
+3.TableColumn has name, width, precision, type, hasPrimaryKeyConstraintApplied, isAutoIncrementable, hasNotNullConstrainApplied, hasUniqueConstraintApplied, defaultValue
+4.ForeignKey has parentTableName, List<ForeignKeyColumnMapping>
+5.ForeignKeyColumnMapping has childTableColumnName, parentTableColumnName
+
+- next annotations, Table, Column, PrimaryKey, Unique, NotNull, Auto, ......
+
+- exception
+
+available here : (orm\framework\src\com\orm\exceptions\DBException.java)
+
+- Now DatabaseUtil.java
+
