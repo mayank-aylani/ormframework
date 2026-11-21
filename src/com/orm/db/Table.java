@@ -1,0 +1,32 @@
+package com.orm.db;
+import java.util.*;
+public class Table
+{
+private String name;
+private List<TableColumn> tableColumns;
+private List<ForeignKey> foreignKeys;
+public void setName(String name)
+{
+this.name=name;
+}
+public String getName()
+{
+return this.name;
+}
+public void setTableColumns(List<TableColumn> tableColumns)
+{
+this.tableColumns=tableColumns;
+}
+public List<TableColumn> getTableColumns()
+{
+return this.tableColumns;
+}
+public void setForeignKeys(List<ForeignKey> foreignKeys)
+{
+this.foreignKeys=foreignKeys;
+}
+public List<ForeignKey> getForeignKeys()
+{
+return this.foreignKeys;
+}
+}
