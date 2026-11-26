@@ -77,3 +77,12 @@ available here : (orm\framework\src\com\orm\exceptions\DBException.java)
 
 - Now DatabaseUtil.java
 
+- Tested DatabaseMetaData 
+
+available here : (orm\framework\testcases\TestDatabaseMetaData.java)
+
+- Now DTOGenerator.java
+
+
+
+TODO FROM LECTURE-82 (PAGE.3)

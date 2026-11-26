@@ -1,0 +1,1 @@
+java -classpath ..\..\..\classes;..\..\..\lib\*;. com.orm.DTOGenerator target-path:org\mygenerator package-name:org.earlorithm
