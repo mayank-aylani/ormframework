@@ -4,14 +4,14 @@ import java.util.*;
 import com.orm.exceptions.*;
 public class DatabaseUtil
 {
-private DatabaseUtil(){} 
-public static Database getDatabase(Connection connection) throws DBException
+private DatabaseUtil(){} public static Database getDatabase(Connection connection) throws DBException
 {
 Database database=new Database();
 try
 {
 DatabaseMetaData databaseMetaData=connection.getMetaData();
-ResultSet tablesResultSet; tablesResultSet=databaseMetaData.getTables(connection.getCatalog(),null,"%",new String[]{"TABLE"});
+ResultSet tablesResultSet; 
+tablesResultSet=databaseMetaData.getTables(connection.getCatalog(),null,"%",new String[]{"TABLE"});
 List<Table> tables=new ArrayList<>();
 List<TableColumn> tableColumns;
 ResultSet columnsResultSet;
@@ -37,7 +37,9 @@ while(tablesResultSet.next())
 {
 table=new Table();
 tableColumns=new ArrayList<TableColumn>(); 
-tableName=tablesResultSet.getString("TABLE_NAME").trim();
+tableName=tablesResultSet.getString("TABLE_NAME");
+if(tableName==null) continue;
+tableName=tableName.trim();
 table.setName(tableName);
 primaryKeysSet=new HashSet<>(); 
 primaryKeysResultSet=databaseMetaData.getPrimaryKeys(connection.getCatalog(),null,tableName);
@@ -53,8 +55,7 @@ while(uniqueKeysResultSet.next())
 uniqueKeyColumnName=uniqueKeysResultSet.getString("COLUMN_NAME");
 uniqueKeysSet.add(uniqueKeyColumnName);
 }
-uniqueKeysResultSet.close(); 
-columnsResultSet=databaseMetaData.getColumns(connection.getCatalog(),null,tableName,"%");
+uniqueKeysResultSet.close(); columnsResultSet=databaseMetaData.getColumns(connection.getCatalog(),null,tableName,"%");
 while(columnsResultSet.next())
 {
 columnName=columnsResultSet.getString("COLUMN_NAME").trim(); 
@@ -62,7 +63,7 @@ typeName=columnsResultSet.getString("TYPE_NAME").trim();
 columnSize=columnsResultSet.getInt("COLUMN_SIZE"); 
 decimalDigits=columnsResultSet.getInt("DECIMAL_DIGITS"); 
 isNullable=columnsResultSet.getString("IS_NULLABLE"); 
-defaultValue=columnsResultSet.getString("COLUMN_DEF").trim(); 
+defaultValue=columnsResultSet.getString("COLUMN_DEF"); 
 isAutoIncrement=columnsResultSet.getString("IS_AUTOINCREMENT"); 
 isPrimaryKey=primaryKeysSet.contains(columnName);
 isUnique=uniqueKeysSet.contains(columnName);
@@ -70,11 +71,7 @@ tableColumn=new TableColumn();
 tableColumn.setName(columnName);
 tableColumn.setWidth(columnSize);
 tableColumn.setPrecision(decimalDigits);
-tableColumn.setType(typeName); 
-tableColumn.setHasPrimaryKeyConstraintApplied(isPrimaryKey); 
-tableColumn.setIsAutoIncrementable(isAutoIncrement.equalsIgnoreCase("YES")); 
-tableColumn.setHasNotNullConstraintApplied(isNullable.equalsIgnoreCase("YES")); 
-tableColumn.setHasUniqueConstraintApplied(isUnique);
+tableColumn.setType(typeName); tableColumn.setHasPrimaryKeyConstraintApplied(isPrimaryKey); tableColumn.setIsAutoIncrementable(isAutoIncrement.equalsIgnoreCase("YES")); tableColumn.setHasNotNullConstraintApplied(isNullable.equalsIgnoreCase("YES")); tableColumn.setHasUniqueConstraintApplied(isUnique);
 tableColumn.setDefaultValue(defaultValue);
 tableColumns.add(tableColumn);
 }
