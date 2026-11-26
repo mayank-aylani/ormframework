@@ -4,5 +4,5 @@ import java.lang.annotation.*;
 @Target(ElementType.FIELD)
 public @interface Precision
 {
-public String value();
+public int value();
 }

@@ -1,0 +1,1 @@
+javac -d ..\..\..\..\classes -classpath ..\..\..\..\classes; %1.java

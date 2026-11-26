@@ -4,5 +4,5 @@ import java.lang.annotation.*;
 @Target(ElementType.FIELD)
 public @interface CheckValueIn
 {
-public Object []values;
+public Object []values={};
 }
